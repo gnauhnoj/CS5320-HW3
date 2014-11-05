@@ -23,7 +23,7 @@ public class TrajDB {
                 if (input.matches("^(CREATE \\w+)$")) {
                     System.out.println("create");
                     System.out.println("args: " + argu[1]);
-                    System.out.println(CreateTraj.create(argu[1]));
+                    CreateTraj.create(argu[1]);
                 } else if (input.matches("^(INSERT INTO \\w+ VALUES (([\\d\\.]+,[\\d\\.]+,[\\d\\.]+,[\\d\\.]+," +
                         "[\\d\\.]+,[\\d\\-]+,[\\d\\:]+)\\s?)+)$")) {
                     System.out.println("insert");
