@@ -1,5 +1,6 @@
 package com.methods;
 import java.io.File;
+import java.io.RandomAccessFile;
 
 
 public class CreateTraj {
@@ -9,43 +10,14 @@ public class CreateTraj {
         try {
             data.getParentFile().mkdirs();
             data.createNewFile();
-
             map.getParentFile().mkdirs();
             map.createNewFile();
 
-//            JSONObject obj = new JSONObject();
-//            JSONObject list = new JSONObject();
-//            obj.put("count", 0);
-//            obj.put("trajectories", list);
-//
-//            FileWriter file = new FileWriter(map);
-//            file.write(obj.toJSONString());
-//            file.flush();
-//            file.close();
+            RandomAccessFile mapRaf = new RandomAccessFile(map, "rw");
+            mapRaf.seek(0);
+            mapRaf.writeInt(0);
 
-//            Brute force approach
-//            RandomAccessFile mapRaf = new RandomAccessFile(map, "rw");
-//            mapRaf.seek(0);
-//            mapRaf.writeInt(1);
-//            System.out.println(mapRaf.readLine());
-//            mapRaf.seek(mapRaf.length());
-//            System.out.println(mapRaf.getFilePointer());
-//            mapRaf.writeChars("testing\r\ntesting2");
-//            System.out.println(mapRaf.getFilePointer());
-//            mapRaf.seek(0);
-//            System.out.println(mapRaf.readLine());
-//            mapRaf.seek(0);
-//            System.out.println(mapRaf.readInt());
-
-//            JSONParser parser = new JSONParser();
-//            Object obj = parser.parse(new FileReader(map));
-//            JSONObject jsonObject = (JSONObject) obj;
-//            Long count = (Long) jsonObject.get("count");
-//            System.out.println(count);
-//
-//            Object trajs = (Object) jsonObject.get("trajectories");
-
-
+            mapRaf.close();
         } catch (Exception e) {e.printStackTrace();}
     }
 }

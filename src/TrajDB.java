@@ -19,19 +19,15 @@ public class TrajDB {
                 String input = scan.next();
                 input = input.replaceAll("\\s+"," ");
                 String[] argu = input.split(" ");
-                // parse regex
                 if (input.matches("^(CREATE \\w+)$")) {
                     System.out.println("create");
-                    System.out.println("args: " + argu[1]);
                     CreateTraj.create(argu[1]);
                 } else if (input.matches("^(INSERT INTO \\w+ VALUES (([\\d\\.]+,[\\d\\.]+,[\\d\\.]+,[\\d\\.]+," +
                         "[\\d\\.]+,[\\d\\-]+,[\\d\\:]+)\\s?)+)$")) {
                     System.out.println("insert");
-                    String print = "args: " + argu[2];
-                    for(int i = 4; i < argu.length; i++) {
-                        print = print + ", " + argu[i];
-                    }
-                    System.out.println(print);
+                    String[] trajs = Arrays.copyOfRange(argu, 4, argu.length);
+                    int ret = InsertTraj.insert(argu[2], trajs);
+                    System.out.println(ret);
                 } else if (input.matches("^(DELETE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("delete");
                     System.out.println("args: " + argu[2] + ", " + argu[4]);
