@@ -29,7 +29,7 @@ public class InsertTraj {
             }
 
 //            optional depending on reading approach
-            dataRaf.writeChars("\n");
+            //dataRaf.writeChars("\n");
 
             end = dataRaf.getFilePointer();
             System.out.println(start);

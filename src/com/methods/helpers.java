@@ -13,7 +13,7 @@ public class helpers {
     }
 
     public static final String mapPath (String arg) {
-        return getPath().resolve(arg + "-map.json").toString();
+        return getPath().resolve(arg + "-map").toString();
     }
 
     public static final String dataPath (String arg) {
