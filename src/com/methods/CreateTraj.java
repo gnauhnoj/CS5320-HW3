@@ -14,8 +14,8 @@ public class CreateTraj {
             map.createNewFile();
 
             RandomAccessFile mapRaf = new RandomAccessFile(map, "rw");
-            mapRaf.seek(0);
-            mapRaf.writeInt(0);
+
+            helpers.writeInt(mapRaf, 0, 0);
 
             mapRaf.close();
         } catch (Exception e) {e.printStackTrace();}

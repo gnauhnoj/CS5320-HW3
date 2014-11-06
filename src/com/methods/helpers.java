@@ -1,5 +1,7 @@
 package com.methods;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -20,4 +22,38 @@ public class helpers {
         return getPath().resolve(arg + "-data").toString();
     }
 
+    public static void writeInt (RandomAccessFile raf, long location, int index) throws IOException {
+        raf.seek(location);
+        raf.writeInt(index);
+    }
+
+    public static int readMapHeader (RandomAccessFile raf) throws IOException {
+        raf.seek(0);
+        return raf.readInt();
+    }
+
+    public static int writeMap (RandomAccessFile raf, long start, long end) throws IOException {
+        int index = helpers.readMapHeader(raf) + 1;
+        writeInt(raf, 0, index);
+        writeInt(raf, raf.length(), index);
+        raf.writeLong(start);
+        raf.writeLong(end);
+        return index;
+    }
+
+    public static long[] writeData (RandomAccessFile raf, String[] arg) throws IOException {
+        long[] out = new long[2];
+        raf.seek(raf.length());
+        out[0] = raf.getFilePointer();
+
+        for (String a : arg) {
+            raf.writeChars(a + " ");
+        }
+
+        out[1] = raf.getFilePointer();
+        System.out.println(out[0]);
+        System.out.println(out[1]);
+
+        return out;
+    }
 }

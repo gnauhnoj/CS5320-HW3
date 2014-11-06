@@ -36,13 +36,11 @@ public class TrajDB {
                     System.out.println("args: " + argu[2] + ", " + argu[4]);
                     String traj = RetrieveTraj.retrieve(argu[2],argu[4]);
                     System.out.println(traj);
-
                 } else if (input.matches("^(RETRIEVE FROM \\w+ COUNT OF \\d+)$")) {
                     System.out.println("retrieve trajectory count");
                     System.out.println("args: " + argu[2] + ", " + argu[5]);
                     int count = RetrieveTraj.getCount(argu[2],argu[5]);
                     System.out.println("Number of measures: " + count);
-
                 } else if (input.matches("^(EXIT)$")) {
                     System.out.println("exit");
                     repl = false;
