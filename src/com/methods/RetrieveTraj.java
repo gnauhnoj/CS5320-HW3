@@ -26,14 +26,28 @@ public class RetrieveTraj {
             int id = Integer.parseInt(tid);
 
             // need to update this for deletion
-            if (id <= 0 || id > helpers.readMapHeader(mapRaf)) {
-                throw new IndexOutOfBoundsException("Index does not exist");
-            }
+//            if (id <= 0 || id > helpers.readMapHeader(mapRaf)) {
+//                throw new IndexOutOfBoundsException("Index does not exist");
+//            }
 
-            int offset = 8 + 20*(id - 1); // Depends on format of map file
-            mapRaf.seek(offset);
+            // search through for desired index
+            int offset = 4;
+            boolean nfound = true;
+            while (nfound) {
+                mapRaf.seek(offset);
+                int found = mapRaf.readInt();
+                System.out.println("found: " +found);
+                nfound = !(id == found);
+                offset = (nfound) ? offset + 20 : offset;
+                if (nfound && ((offset + 20) > mapRaf.length())) { throw new IndexOutOfBoundsException("Index does not exist");}
+            }
             start = mapRaf.readLong();
             end = mapRaf.readLong();
+
+//            int offset = 8 + 20*(id - 1); // Depends on format of map file
+//            mapRaf.seek(offset);
+//            start = mapRaf.readLong();
+//            end = mapRaf.readLong();
 //            System.out.println(start + "," + end);
 
             dataRaf.seek(start);
