@@ -46,6 +46,7 @@ public class helpers {
         raf.seek(raf.length());
         out[0] = raf.getFilePointer();
 
+        // total size for each measure = 5*4 (int,float) + 10*2 (date) + 8*2 (time) = 56
         for (String a : arg) {
             //raf.writeChars(a + " ");
             String[] values = a.split(",");
