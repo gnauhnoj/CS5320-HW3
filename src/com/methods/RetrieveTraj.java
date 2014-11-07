@@ -24,23 +24,32 @@ public class RetrieveTraj {
             // Get start and end points for specified trajectory from map file
             long start, end;
             int id = Integer.parseInt(tid);
+
+            // need to update this for deletion
+            if (id <= 0 || id > helpers.readMapHeader(mapRaf)) {
+                throw new IndexOutOfBoundsException("Index does not exist");
+            }
+
             int offset = 8 + 20*(id - 1); // Depends on format of map file
             mapRaf.seek(offset);
             start = mapRaf.readLong();
             end = mapRaf.readLong();
-            System.out.println(start + "," + end);
+//            System.out.println(start + "," + end);
 
             dataRaf.seek(start);
-            //String s2 = dataRaf.readLine();
             long length = end - start;
-            byte[] arr = new byte[(int) length];
-            dataRaf.readFully(arr);
-            trajectory = new String(arr);
-            //System.out.println(s2);
+            int count = (int) (length / 56);
+
+            StringBuilder sb = new StringBuilder();
+            String entry;
+            for(int x = 0; x < count-1; x++) {
+                entry = helpers.readEntry(dataRaf);
+                sb.append(entry).append(" ");
+            }
+            trajectory = trajectory + sb.toString() + helpers.readEntry(dataRaf);
 
             mapRaf.close();
             dataRaf.close();
-
         } catch (Exception e){
             e.printStackTrace();
             trajectory = "Could not fetch trajectory";
@@ -50,6 +59,7 @@ public class RetrieveTraj {
 
     public static int getCount (String tname, String tid){
         int count;
+        // length divided by 56
         String trajectory = retrieve (tname, tid);
         String[] parts = trajectory.split("\\s+");
         count = parts.length;

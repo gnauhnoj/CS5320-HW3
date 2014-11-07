@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 
 /**
  * Created by jhh11 on 11/5/14.
@@ -68,5 +69,25 @@ public class helpers {
 
     public static boolean fileExists (File map, File data) throws IOException {
         return ((map.exists() && !map.isDirectory()) || (data.exists() && !data.isDirectory()));
+    }
+
+    // dataRaf should have been navigated
+    public static String readEntry (RandomAccessFile dataRaf) throws IOException {
+        float one = dataRaf.readFloat();
+        float two = dataRaf.readFloat();
+        int three = dataRaf.readInt();
+        float four = dataRaf.readFloat();
+        float five = dataRaf.readFloat();
+
+        byte[] sixArr = new byte[20];
+        dataRaf.readFully(sixArr);
+        String six = new String(sixArr);
+
+        byte[] sevenArr = new byte[16];
+        dataRaf.readFully(sevenArr);
+        String seven = new String(sevenArr);
+
+        String entry = one + "," + two + "," + three + "," + four + "," + five + "," + six + "," + seven;
+        return entry;
     }
 }
