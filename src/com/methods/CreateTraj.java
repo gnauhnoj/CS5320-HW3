@@ -26,11 +26,10 @@ public class CreateTraj {
 
             RandomAccessFile mapRaf = new RandomAccessFile(map, "rw");
             RandomAccessFile spaceRaf = new RandomAccessFile(freespace, "rw");
-            helpers.writeInt(spaceRaf,0,0);
+            helpers.writeInt(spaceRaf, 0, 0);
             helpers.writeInt(mapRaf, 0, 0);
             mapRaf.close();
             spaceRaf.close();
-
         } catch (Exception e) {e.printStackTrace();}
     }
 }

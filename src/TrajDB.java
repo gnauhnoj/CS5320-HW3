@@ -36,7 +36,7 @@ public class TrajDB {
                 } else if (input.matches("^(RETRIEVE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("retrieve trajectory set");
                     System.out.println("args: " + argu[2] + ", " + argu[4]);
-                    String traj = RetrieveTraj.retrieve(argu[2],argu[4]);
+                    String traj = RetrieveTraj.retrieve(argu[2], argu[4]);
                     System.out.println("Trajectory: " + traj);
                 } else if (input.matches("^(RETRIEVE FROM \\w+ COUNT OF \\d+)$")) {
                     System.out.println("retrieve trajectory count");

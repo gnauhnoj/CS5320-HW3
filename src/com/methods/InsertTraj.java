@@ -13,7 +13,7 @@ public class InsertTraj {
         File data = new File(com.methods.helpers.dataPath(name));
         File freespace =  new File(com.methods.helpers.freespacePath(name));
         try {
-            if (!helpers.fileExists(map) || !helpers.fileExists(data)) {
+            if (!helpers.fileExists(map) || !helpers.fileExists(data) || !helpers.fileExists(freespace)) {
                 throw new FileNotFoundException("Trajectory Set Does Not Exist");
             }
 
@@ -24,22 +24,25 @@ public class InsertTraj {
             long[] dataLoc;
             long mapPointer;
             // Check whether there is enough freespace to insert it in the middle
-            if (helpers.checkSpace(freespaceRaf)){
-                long requiredByteSize = arg.length*56;
 
+            // TODO: Refactor this - this is so un-DRY
+            if (helpers.checkSpace(freespaceRaf)){
                 // Check whether any gap is big enough to fit new trajectory, if not, write it at bottom of data file
+                long requiredByteSize = arg.length * 56;
                 long startPointer[] = helpers.getStartPointer(freespaceRaf, requiredByteSize);
-                if (startPointer[0] == -1){
+                // TODO: Ternary
+                if (startPointer[0] == -1) {
                     startPointer[0] = dataRaf.length();
                     mapPointer = mapRaf.length();
                 } else {
                     // Check whether info about new trajectory is to be written at bottom of map file
                     if (startPointer[1] != -1) {
                         mapPointer = startPointer[1];
-                    } else mapPointer = mapRaf.length();
+                    } else {
+                        mapPointer = mapRaf.length();
+                    }
                 }
                 dataLoc = helpers.writeData(dataRaf, arg, startPointer[0]);
-
             } else {
                 dataLoc = helpers.writeData(dataRaf, arg, dataRaf.length());
                 mapPointer = mapRaf.length();

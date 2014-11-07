@@ -66,7 +66,6 @@ public class helpers {
 
         // total size for each measure = 5*4 (int,float) + 10*2 (date) + 8*2 (time) = 56
         for (String a : arg) {
-            //raf.writeChars(a + " ");
             String[] values = a.split(",");
             raf.writeFloat(Float.parseFloat(values[0]));
             raf.writeFloat(Float.parseFloat(values[1]));
@@ -108,32 +107,27 @@ public class helpers {
     }
 
     // Returns array (long) with start and end index of trajectory in data file as well as offset within map file
-    public static long[] getLimits (RandomAccessFile raf, int id){
+    public static long[] getLimits (RandomAccessFile raf, int id) throws IOException{
         long[] limits = new long[3];
 
         // search through for desired index
         long offset = 4;
-        try{
-            int flag = 0;
-            boolean nfound = true;
-            while (nfound) {
-                raf.seek(offset);
-                int found = raf.readInt();
-                //System.out.println("found: " +found);
-                nfound = !(id == found);
-                offset = (nfound) ? offset + 20 : offset;
-                if (nfound && ((offset + 20) > raf.length())) {
 
-                    throw new IndexOutOfBoundsException("Index does not exist");
-                }
+        boolean nfound = true;
+        while (nfound) {
+            raf.seek(offset);
+            int found = raf.readInt();
+            //System.out.println("found: " +found);
+            nfound = !(id == found);
+            offset = (nfound) ? offset + 20 : offset;
+            if (nfound && ((offset + 20) > raf.length())) {
+                throw new IndexOutOfBoundsException("Index does not exist");
             }
-            limits[0] = raf.readLong();
-            limits[1] = raf.readLong();
-            limits[2] = offset;
-
-        }catch(Exception e) {
-            e.printStackTrace();
         }
+        limits[0] = raf.readLong();
+        limits[1] = raf.readLong();
+        limits[2] = offset;
+
         return limits;
     }
 
@@ -164,13 +158,13 @@ public class helpers {
             if (availableSize >= requiredSize) {
                 space = true;
                 startPointer[0] = start;
-                freespaceRaf.seek(offset - 8);
 
+                freespaceRaf.seek(offset - 8);
                 startPointer[1] = freespaceRaf.readLong();
 
                 // Update freespace file
-                if (availableSize == requiredSize)  //remove entry completely by shifting last row up and truncating file
-                {
+                //remove entry completely by shifting last row up and truncating file
+                if (availableSize == requiredSize) {
                     freespaceRaf.seek(freespaceRaf.length() - 24);
                     long mapPointer = freespaceRaf.readLong();
                     start = freespaceRaf.readLong();
@@ -185,12 +179,11 @@ public class helpers {
                     // Reduce count by 1 since space is completely filled
                     int index = readHeader(freespaceRaf) - 1;
                     writeInt(freespaceRaf, 0, index);
-
                 }
                 // New available start position shifted to end of inserted trajectory
-                else
-                {
-                    freespaceRaf.seek(offset);
+                else {
+                    freespaceRaf.seek(offset-8);
+                    freespaceRaf.writeLong(-1);
                     start = start + requiredSize;
                     freespaceRaf.writeLong(start);
                 }

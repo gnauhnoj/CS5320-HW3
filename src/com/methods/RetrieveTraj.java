@@ -25,17 +25,7 @@ public class RetrieveTraj {
             long[] limits;
             int id = Integer.parseInt(tid);
 
-            // need to update this for deletion
-//            if (id <= 0 || id > helpers.readMapHeader(mapRaf)) {
-//                throw new IndexOutOfBoundsException("Index does not exist");
-//            }
             limits = helpers.getLimits(mapRaf,id);
-
-//            int offset = 8 + 20*(id - 1); // Depends on format of map file
-//            mapRaf.seek(offset);
-//            start = mapRaf.readLong();
-//            end = mapRaf.readLong();
-//            System.out.println(start + "," + end);
 
             dataRaf.seek(limits[0]);
             long length = limits[1] - limits[0];
