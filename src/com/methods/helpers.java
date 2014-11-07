@@ -24,22 +24,36 @@ public class helpers {
         return getPath().resolve(arg + "-data").toString();
     }
 
+    public static final String freespacePath (String arg) {
+        return getPath().resolve(arg + "-freespace").toString();
+    }
+
     public static void writeInt (RandomAccessFile raf, long location, int index) throws IOException {
         raf.seek(location);
         raf.writeInt(index);
     }
 
-    public static int readMapHeader (RandomAccessFile raf) throws IOException {
+    public static int readHeader (RandomAccessFile raf) throws IOException {
         raf.seek(0);
         return raf.readInt();
     }
 
     public static int writeMap (RandomAccessFile raf, long start, long end) throws IOException {
-        int index = helpers.readMapHeader(raf) + 1;
+        int index = readHeader(raf) + 1;
         writeInt(raf, 0, index);
         writeInt(raf, raf.length(), index);
         raf.writeLong(start);
         raf.writeLong(end);
+        return index;
+    }
+
+    // Writes details of deleted index into freespace file
+    public static int writeFreespace (RandomAccessFile raf, long[] limits) throws IOException {
+        int index = readHeader(raf) + 1;
+        writeInt(raf, 0, index);
+        writeInt(raf, raf.length(), (int) limits[2]);
+        raf.writeLong(limits[0]);
+        raf.writeLong(limits[1]);
         return index;
     }
 
@@ -67,8 +81,8 @@ public class helpers {
         return out;
     }
 
-    public static boolean fileExists (File map, File data) throws IOException {
-        return ((map.exists() && !map.isDirectory()) || (data.exists() && !data.isDirectory()));
+    public static boolean fileExists (File file) throws IOException {
+        return ((file.exists() && !file.isDirectory()));
     }
 
     // dataRaf should have been navigated
@@ -89,5 +103,32 @@ public class helpers {
 
         String entry = one + "," + two + "," + three + "," + four + "," + five + "," + six + "," + seven;
         return entry;
+    }
+
+    // Returns array (long) with start and end index of trajectory in data file as well as offset within map file
+    public static long[] getLimits (RandomAccessFile raf, int id){
+        long[] limits = new long[3];
+
+        // search through for desired index
+        int offset = 4;
+        try{
+            boolean nfound = true;
+            while (nfound) {
+                raf.seek(offset);
+                int found = raf.readInt();
+                //System.out.println("found: " +found);
+                nfound = !(id == found);
+                offset = (nfound) ? offset + 20 : offset;
+                if (nfound && ((offset + 20) > raf.length())) {
+                    throw new IndexOutOfBoundsException("Index does not exist");
+                }
+            }
+            limits[0] = raf.readLong();
+            limits[1] = raf.readLong();
+            limits[2] = (long) offset;
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return limits;
     }
 }

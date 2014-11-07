@@ -14,7 +14,7 @@ public class RetrieveTraj {
         File map = new File(com.methods.helpers.mapPath(tname));
         File data = new File(com.methods.helpers.dataPath(tname));
         try {
-            if (!helpers.fileExists(map, data)) {
+            if (!helpers.fileExists(map) || !helpers.fileExists(data)) {
                 throw new FileNotFoundException("Trajectory Set Does Not Exist");
             }
 
@@ -22,27 +22,14 @@ public class RetrieveTraj {
             RandomAccessFile dataRaf = new RandomAccessFile(data, "rw");
 
             // Get start and end points for specified trajectory from map file
-            long start, end;
+            long[] limits;
             int id = Integer.parseInt(tid);
 
             // need to update this for deletion
 //            if (id <= 0 || id > helpers.readMapHeader(mapRaf)) {
 //                throw new IndexOutOfBoundsException("Index does not exist");
 //            }
-
-            // search through for desired index
-            int offset = 4;
-            boolean nfound = true;
-            while (nfound) {
-                mapRaf.seek(offset);
-                int found = mapRaf.readInt();
-                System.out.println("found: " +found);
-                nfound = !(id == found);
-                offset = (nfound) ? offset + 20 : offset;
-                if (nfound && ((offset + 20) > mapRaf.length())) { throw new IndexOutOfBoundsException("Index does not exist");}
-            }
-            start = mapRaf.readLong();
-            end = mapRaf.readLong();
+            limits = helpers.getLimits(mapRaf,id);
 
 //            int offset = 8 + 20*(id - 1); // Depends on format of map file
 //            mapRaf.seek(offset);
@@ -50,8 +37,8 @@ public class RetrieveTraj {
 //            end = mapRaf.readLong();
 //            System.out.println(start + "," + end);
 
-            dataRaf.seek(start);
-            long length = end - start;
+            dataRaf.seek(limits[0]);
+            long length = limits[1] - limits[0];
             int count = (int) (length / 56);
 
             StringBuilder sb = new StringBuilder();

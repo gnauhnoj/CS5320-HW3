@@ -31,6 +31,8 @@ public class TrajDB {
                 } else if (input.matches("^(DELETE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("delete");
                     System.out.println("args: " + argu[2] + ", " + argu[4]);
+                    String result = DeleteTraj.delete(argu[2],argu[4]);
+                    System.out.println(result);
                 } else if (input.matches("^(RETRIEVE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("retrieve trajectory set");
                     System.out.println("args: " + argu[2] + ", " + argu[4]);

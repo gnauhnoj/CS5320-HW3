@@ -12,7 +12,7 @@ public class InsertTraj {
         File map = new File(com.methods.helpers.mapPath(name));
         File data = new File(com.methods.helpers.dataPath(name));
         try {
-            if (!helpers.fileExists(map, data)) {
+            if (!helpers.fileExists(map) || !helpers.fileExists(data)) {
                 throw new FileNotFoundException("Trajectory Set Does Not Exist");
             }
 
