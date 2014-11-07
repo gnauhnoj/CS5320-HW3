@@ -61,7 +61,6 @@ public class helpers {
         out[1] = raf.getFilePointer();
         System.out.println(out[0]);
         System.out.println(out[1]);
-
         return out;
     }
 }
