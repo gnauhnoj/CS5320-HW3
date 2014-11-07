@@ -31,16 +31,19 @@ public class DeleteTraj {
             //int oldindex = mapRaf.readInt();
 
             helpers.writeInt(mapRaf,limits[2],-1);
-            mapRaf.seek(limits[2]);
+            //mapRaf.seek(limits[2]);
             //int i = mapRaf.readInt();
             //System.out.println("Is it -1: " + i);
+
             // Write deleted traj details into freespace file (location in map file, start pointer, end pointer)
             int deleted = helpers.writeFreespace(freespaceRaf,limits);
 
-            freespaceRaf.seek(4);
+            //freespaceRaf.seek(4);
             //int j = freespaceRaf.readInt();
             //System.out.println("Is it 4: " + j);
             result = "Deleted successfully";
+            freespaceRaf.close();
+            mapRaf.close();
         }catch (Exception e){
             result = "Error in deleting";
             e.printStackTrace();

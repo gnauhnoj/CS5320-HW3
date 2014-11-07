@@ -38,10 +38,10 @@ public class helpers {
         return raf.readInt();
     }
 
-    public static int writeMap (RandomAccessFile raf, long start, long end) throws IOException {
+    public static int writeMap (RandomAccessFile raf, long start, long end, long pointer) throws IOException {
         int index = readHeader(raf) + 1;
         writeInt(raf, 0, index);
-        writeInt(raf, raf.length(), index);
+        writeInt(raf, pointer, index);
         raf.writeLong(start);
         raf.writeLong(end);
         return index;
@@ -51,15 +51,17 @@ public class helpers {
     public static int writeFreespace (RandomAccessFile raf, long[] limits) throws IOException {
         int index = readHeader(raf) + 1;
         writeInt(raf, 0, index);
-        writeInt(raf, raf.length(), (int) limits[2]);
+        raf.seek(raf.length());
+        raf.writeLong(limits[2]);
+        //writeInt(raf, raf.length(), (int) limits[2]);
         raf.writeLong(limits[0]);
         raf.writeLong(limits[1]);
         return index;
     }
 
-    public static long[] writeData (RandomAccessFile raf, String[] arg) throws IOException {
+    public static long[] writeData (RandomAccessFile raf, String[] arg, long startPointer) throws IOException {
         long[] out = new long[2];
-        raf.seek(raf.length());
+        raf.seek(startPointer);
         out[0] = raf.getFilePointer();
 
         // total size for each measure = 5*4 (int,float) + 10*2 (date) + 8*2 (time) = 56
@@ -110,8 +112,9 @@ public class helpers {
         long[] limits = new long[3];
 
         // search through for desired index
-        int offset = 4;
+        long offset = 4;
         try{
+            int flag = 0;
             boolean nfound = true;
             while (nfound) {
                 raf.seek(offset);
@@ -120,15 +123,70 @@ public class helpers {
                 nfound = !(id == found);
                 offset = (nfound) ? offset + 20 : offset;
                 if (nfound && ((offset + 20) > raf.length())) {
+
                     throw new IndexOutOfBoundsException("Index does not exist");
                 }
             }
             limits[0] = raf.readLong();
             limits[1] = raf.readLong();
-            limits[2] = (long) offset;
+            limits[2] = offset;
+
         }catch(Exception e) {
             e.printStackTrace();
         }
         return limits;
+    }
+
+    public static boolean checkSpace (RandomAccessFile freespaceRaf) throws IOException{
+        freespaceRaf.seek(0);
+        int number = freespaceRaf.readInt();
+        if (number > 0) return true;
+        else return false;
+    }
+
+    public static long[] getStartPointer (RandomAccessFile freespaceRaf, long requiredSize) throws IOException {
+        long[] startPointer = new long[2];
+        startPointer[0] = -1;
+        startPointer[1] = -1;
+        long offset = 12;
+        boolean space = false;
+
+        while (!space){
+            freespaceRaf.seek(offset);
+            long start = freespaceRaf.readLong();
+            long end = freespaceRaf.readLong();
+            long availableSize = end - start;
+            if (availableSize >= requiredSize) {
+                space = true;
+                startPointer[0] = start;
+                freespaceRaf.seek(offset - 8);
+
+                startPointer[1] = freespaceRaf.readLong();
+
+                // Update freespace file
+                if (availableSize == requiredSize)  //remove entry completely by shifting last row up and truncating file
+                {
+                    freespaceRaf.seek(freespaceRaf.length() - 24);
+                    long mapPointer = freespaceRaf.readLong();
+                    start = freespaceRaf.readLong();
+                    end = freespaceRaf.readLong();
+                    freespaceRaf.seek(offset - 8);
+                    freespaceRaf.writeLong(mapPointer);
+                    freespaceRaf.writeLong(start);
+                    freespaceRaf.writeLong(end);
+                    // Truncate file
+                    freespaceRaf.setLength(freespaceRaf.length() - 24);
+                } else {
+                    freespaceRaf.seek(offset);
+                    start = start + requiredSize;
+                    freespaceRaf.writeLong(start);
+                }
+            }
+            offset = offset + 24;
+            if ((offset + 24) > freespaceRaf.length() && !space){
+                break;
+            }
+        }
+        return startPointer;
     }
 }
