@@ -144,6 +144,9 @@ public class helpers {
         else return false;
     }
 
+    // If space is found, rearranges freespace file. If not, returns -1,-1.
+    // startPointer[0] -> position where data should be written in data file (otherwise -1)
+    // startPointer[1] -> position where map file should be updated (-1 if at end)
     public static long[] getStartPointer (RandomAccessFile freespaceRaf, long requiredSize) throws IOException {
         long[] startPointer = new long[2];
         startPointer[0] = -1;
