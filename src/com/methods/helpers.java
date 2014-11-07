@@ -145,7 +145,7 @@ public class helpers {
     }
 
     // If space is found, rearranges freespace file. If not, returns -1,-1.
-    // startPointer[0] -> position where data should be written in data file (otherwise -1)
+    // startPointer[0] -> position in data file where data should be written (otherwise -1)
     // startPointer[1] -> position where map file should be updated (-1 if at end)
     public static long[] getStartPointer (RandomAccessFile freespaceRaf, long requiredSize) throws IOException {
         long[] startPointer = new long[2];
@@ -159,6 +159,8 @@ public class helpers {
             long start = freespaceRaf.readLong();
             long end = freespaceRaf.readLong();
             long availableSize = end - start;
+
+            // Check whether there is enough space for new traj
             if (availableSize >= requiredSize) {
                 space = true;
                 startPointer[0] = start;
@@ -179,7 +181,15 @@ public class helpers {
                     freespaceRaf.writeLong(end);
                     // Truncate file
                     freespaceRaf.setLength(freespaceRaf.length() - 24);
-                } else {
+
+                    // Reduce count by 1 since space is completely filled
+                    int index = readHeader(freespaceRaf) - 1;
+                    writeInt(freespaceRaf, 0, index);
+
+                }
+                // New available start position shifted to end of inserted trajectory
+                else
+                {
                     freespaceRaf.seek(offset);
                     start = start + requiredSize;
                     freespaceRaf.writeLong(start);
