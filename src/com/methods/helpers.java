@@ -53,7 +53,7 @@ public class helpers {
         writeInt(raf, 0, index);
         raf.seek(raf.length());
         raf.writeLong(limits[2]);
-        //writeInt(raf, raf.length(), (int) limits[2]);
+
         raf.writeLong(limits[0]);
         raf.writeLong(limits[1]);
         return index;
@@ -182,6 +182,8 @@ public class helpers {
                 }
                 // New available start position shifted to end of inserted trajectory
                 else {
+
+                    // write -1 in for mapPointer location and rewrite start
                     freespaceRaf.seek(offset-8);
                     freespaceRaf.writeLong(-1);
                     start = start + requiredSize;
@@ -189,7 +191,7 @@ public class helpers {
                 }
             }
             offset = offset + 24;
-            if ((offset + 24) > freespaceRaf.length() && !space){
+            if ((offset + 24) > freespaceRaf.length() && !space) {
                 break;
             }
         }

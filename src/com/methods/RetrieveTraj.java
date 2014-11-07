@@ -50,8 +50,7 @@ public class RetrieveTraj {
 
     public static int getCount (String tname, String tid){
         int count;
-        // length divided by 56
-        String trajectory = retrieve (tname, tid);
+        String trajectory = retrieve(tname, tid);
         String[] parts = trajectory.split("\\s+");
         count = parts.length;
         return count;
