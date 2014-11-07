@@ -82,39 +82,4 @@ atlassian-ide-plugin.xml
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 
-
-### https://raw.github.com/github/gitignore/d9cc01e935a8f0f961a3b2eed38c16d27cc07f64/Global/Eclipse.gitignore
-
-*.pydevproject
-.metadata
-.gradle
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-
-# CDT-specific
-.cproject
-
-# PDT-specific
-.buildpath
-
-# sbteclipse plugin 
-.target
-
-# TeXlipse plugin
-.texlipse
-
-
 data/

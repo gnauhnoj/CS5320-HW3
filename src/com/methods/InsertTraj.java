@@ -1,8 +1,8 @@
 package com.methods;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 
 /**
  * Created by jhh11 on 11/5/14.
@@ -12,6 +12,10 @@ public class InsertTraj {
         File map = new File(com.methods.helpers.mapPath(name));
         File data = new File(com.methods.helpers.dataPath(name));
         try {
+            if (!helpers.fileExists(map, data)) {
+                throw new FileNotFoundException("Trajectory Set Does Not Exist");
+            }
+
             RandomAccessFile mapRaf = new RandomAccessFile(map, "rw");
             RandomAccessFile dataRaf = new RandomAccessFile(data, "rw");
 

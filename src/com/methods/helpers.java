@@ -1,5 +1,6 @@
 package com.methods;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Path;
@@ -62,7 +63,10 @@ public class helpers {
         out[1] = raf.getFilePointer();
         System.out.println(out[0]);
         System.out.println(out[1]);
-
         return out;
+    }
+
+    public static boolean fileExists (File map, File data) throws IOException {
+        return ((map.exists() && !map.isDirectory()) || (data.exists() && !data.isDirectory()));
     }
 }
