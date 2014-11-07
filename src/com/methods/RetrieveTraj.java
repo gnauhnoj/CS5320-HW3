@@ -20,7 +20,7 @@ public class RetrieveTraj {
             // Get start and end points for specified trajectory from map file
             long start, end;
             int id = Integer.parseInt(tid);
-            int offset = 4 + 16*(id - 1); // Depends on format of map file
+            int offset = 8 + 20*(id - 1); // Depends on format of map file
             mapRaf.seek(offset);
             start = mapRaf.readLong();
             end = mapRaf.readLong();
@@ -34,8 +34,12 @@ public class RetrieveTraj {
             trajectory = new String(arr);
             //System.out.println(s2);
 
+            mapRaf.close();
+            dataRaf.close();
+
         } catch (Exception e){
             e.printStackTrace();
+            trajectory = "Could not fetch trajectory";
         }
         return trajectory;
     }
