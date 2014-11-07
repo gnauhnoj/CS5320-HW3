@@ -1,6 +1,7 @@
 package com.methods;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 
 /**
@@ -12,8 +13,11 @@ public class RetrieveTraj {
         String trajectory = "";
         File map = new File(com.methods.helpers.mapPath(tname));
         File data = new File(com.methods.helpers.dataPath(tname));
-
         try {
+            if (!helpers.fileExists(map, data)) {
+                throw new FileNotFoundException("Trajectory Set Does Not Exist");
+            }
+
             RandomAccessFile mapRaf = new RandomAccessFile(map, "rw");
             RandomAccessFile dataRaf = new RandomAccessFile(data, "rw");
 
