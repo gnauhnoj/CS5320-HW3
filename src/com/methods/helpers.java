@@ -47,7 +47,15 @@ public class helpers {
         out[0] = raf.getFilePointer();
 
         for (String a : arg) {
-            raf.writeChars(a + " ");
+            //raf.writeChars(a + " ");
+            String[] values = a.split(",");
+            raf.writeFloat(Float.parseFloat(values[0]));
+            raf.writeFloat(Float.parseFloat(values[1]));
+            raf.writeInt(Integer.parseInt(values[2]));
+            raf.writeFloat(Float.parseFloat(values[3]));
+            raf.writeFloat(Float.parseFloat(values[4]));
+            raf.writeChars(values[5]);
+            raf.writeChars(values[6]);
         }
 
         out[1] = raf.getFilePointer();

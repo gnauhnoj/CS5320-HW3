@@ -28,6 +28,7 @@ public class TrajDB {
                     String[] trajs = Arrays.copyOfRange(argu, 4, argu.length);
                     int ret = InsertTraj.insert(argu[2], trajs);
                     System.out.println(ret);
+
                 } else if (input.matches("^(DELETE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("delete");
                     System.out.println("args: " + argu[2] + ", " + argu[4]);
