@@ -1,4 +1,5 @@
 import com.methods.*;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import sun.tools.java.SyntaxError;
 
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class TrajDB {
                     System.out.println("exit");
                     repl = false;
                 } else {
-                    throw new SyntaxError();
+                    throw new SyntaxException("Syntax Error Detected");
                 }
             }
             catch (Exception e) {e.printStackTrace();}
