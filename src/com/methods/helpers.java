@@ -11,20 +11,20 @@ import java.util.Random;
  * Created by jhh11 on 11/5/14.
  */
 public class helpers {
-    public static final Path getPath () {
+    public static Path getPath () {
         Path path = Paths.get(System.getProperty("user.dir")).resolve("data");
         return path;
     }
 
-    public static final String mapPath (String arg) {
+    public static String mapPath (String arg) {
         return getPath().resolve(arg + "-map").toString();
     }
 
-    public static final String dataPath (String arg) {
+    public static String dataPath (String arg) {
         return getPath().resolve(arg + "-data").toString();
     }
 
-    public static final String freespacePath (String arg) {
+    public static String freespacePath (String arg) {
         return getPath().resolve(arg + "-freespace").toString();
     }
 
@@ -182,7 +182,6 @@ public class helpers {
                 }
                 // New available start position shifted to end of inserted trajectory
                 else {
-
                     // write -1 in for mapPointer location and rewrite start
                     freespaceRaf.seek(offset-8);
                     freespaceRaf.writeLong(-1);

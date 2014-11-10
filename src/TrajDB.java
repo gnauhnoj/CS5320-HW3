@@ -21,8 +21,8 @@ public class TrajDB {
                 if (input.matches("^(CREATE \\w+)$")) {
                     System.out.println("create");
                     CreateTraj.create(argu[1]);
-                } else if (input.matches("^(INSERT INTO \\w+ VALUES (([\\d\\.]+,[\\d\\.]+,[\\d\\.]+,[\\d\\.]+," +
-                        "[\\d\\.]+,[\\d\\-]+,[\\d\\:]+)\\s?)+)$")) {
+                } else if (input.matches("^(INSERT INTO \\w+ VALUES (([\\d.]+,[\\d.]+,[\\d.]+,[\\d.]+,[\\d.]" +
+                        "+,\\d\\d\\d\\d-\\d\\d-\\d\\d,\\d\\d:\\d\\d:\\d\\d)\\s?)+)$")) {
                     System.out.println("insert");
                     String[] trajs = Arrays.copyOfRange(argu, 4, argu.length);
                     int ret = InsertTraj.insert(argu[2], trajs);
@@ -30,17 +30,17 @@ public class TrajDB {
 
                 } else if (input.matches("^(DELETE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("delete");
-                    System.out.println("args: " + argu[2] + ", " + argu[4]);
+//                    System.out.println("args: " + argu[2] + ", " + argu[4]);
                     String result = DeleteTraj.delete(argu[2],argu[4]);
                     System.out.println(result);
                 } else if (input.matches("^(RETRIEVE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("retrieve trajectory set");
-                    System.out.println("args: " + argu[2] + ", " + argu[4]);
+//                    System.out.println("args: " + argu[2] + ", " + argu[4]);
                     String traj = RetrieveTraj.retrieve(argu[2], argu[4]);
                     System.out.println("Trajectory: " + traj);
                 } else if (input.matches("^(RETRIEVE FROM \\w+ COUNT OF \\d+)$")) {
                     System.out.println("retrieve trajectory count");
-                    System.out.println("args: " + argu[2] + ", " + argu[5]);
+//                    System.out.println("args: " + argu[2] + ", " + argu[5]);
                     int count = RetrieveTraj.getCount(argu[2],argu[5]);
                     System.out.println("Number of measures: " + count);
                 } else if (input.matches("^(EXIT)$")) {
