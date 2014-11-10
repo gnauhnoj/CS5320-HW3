@@ -163,8 +163,10 @@ public class helpers {
                 startPointer[1] = freespaceRaf.readLong();
 
                 // Update freespace file
-                //remove entry completely by shifting last row up and truncating file
+
                 if (availableSize == requiredSize) {
+
+                    //remove entry completely by shifting last row up and truncating file
                     freespaceRaf.seek(freespaceRaf.length() - 24);
                     long mapPointer = freespaceRaf.readLong();
                     start = freespaceRaf.readLong();
@@ -173,15 +175,16 @@ public class helpers {
                     freespaceRaf.writeLong(mapPointer);
                     freespaceRaf.writeLong(start);
                     freespaceRaf.writeLong(end);
+
                     // Truncate file
                     freespaceRaf.setLength(freespaceRaf.length() - 24);
 
-                    // Reduce count by 1 since space is completely filled
+                    // Reduce count by 1 since the free slot is now completely filled
                     int index = readHeader(freespaceRaf) - 1;
                     writeInt(freespaceRaf, 0, index);
                 }
-                // New available start position shifted to end of inserted trajectory
                 else {
+                    // New available start position shifted to end of inserted trajectory
                     // write -1 in for mapPointer location and rewrite start
                     freespaceRaf.seek(offset-8);
                     freespaceRaf.writeLong(-1);

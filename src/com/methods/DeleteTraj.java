@@ -27,23 +27,16 @@ public class DeleteTraj {
             // Mark -1 on index (in map file) of trajectory to be deleted
             long[] limits;
             limits = helpers.getLimits(mapRaf, id);
-            //mapRaf.seek(limits[2]);
-            //int oldindex = mapRaf.readInt();
-
             helpers.writeInt(mapRaf, limits[2], -1);
-            //mapRaf.seek(limits[2]);
-            //int i = mapRaf.readInt();
-            //System.out.println("Is it -1: " + i);
 
             // Write deleted traj details into freespace file (location in map file, start pointer, end pointer)
             int deleted = helpers.writeFreespace(freespaceRaf, limits);
 
-            //freespaceRaf.seek(4);
-            //int j = freespaceRaf.readInt();
-            //System.out.println("Is it 4: " + j);
             result = "Deleted successfully";
+
             freespaceRaf.close();
             mapRaf.close();
+
         }catch (Exception e){
             result = "Error in deleting";
             e.printStackTrace();

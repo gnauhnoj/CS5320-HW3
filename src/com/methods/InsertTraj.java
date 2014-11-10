@@ -26,10 +26,12 @@ public class InsertTraj {
 
             // Check whether there is enough freespace to insert it in the middle
             if (helpers.checkSpace(freespaceRaf)){
+
                 // Check whether any gap is big enough to fit new trajectory, if not, write it at bottom of data file
                 long requiredByteSize = arg.length * 56;
                 long startPointer[] = helpers.getStartPointer(freespaceRaf, requiredByteSize);
 
+                // Assign pointer locations for map and data files depending on status of freespace file.
                 startPointer[0] = (startPointer[0] == -1) ? dataRaf.length() : startPointer[0];
                 mapPointer = ((startPointer[0] != -1) && (startPointer[1] != -1)) ? startPointer[1] : mapPointer;
 
