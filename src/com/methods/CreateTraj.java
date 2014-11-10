@@ -6,9 +6,9 @@ import java.io.RandomAccessFile;
 
 public class CreateTraj {
     public static void create (String arg) {
+        // open and create new map, data, and free space files
         File map = new File(com.methods.helpers.mapPath(arg));
         File data = new File(com.methods.helpers.dataPath(arg));
-
         // FORMAT - header: int, every row: long ,long,long
         File freespace = new File(com.methods.helpers.freespacePath(arg));
 

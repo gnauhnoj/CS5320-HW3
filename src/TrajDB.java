@@ -10,14 +10,18 @@ import java.util.Scanner;
  */
 public class TrajDB {
     public static void main (String[] args) throws IOException {
+        // starts the REPL
         boolean repl = true;
         while (repl) {
             try {
+                // split input on semicolons, only grab and interpret statements before the first semicolon
                 Scanner scan = new Scanner(System.in).useDelimiter(";");
                 System.out.print("TrajDB > ");
                 String input = scan.next();
                 input = input.replaceAll("\\s+"," ");
                 String[] argu = input.split(" ");
+
+                // different function calls - requires statement to terminate with a semicolon (no previous break)
                 if (input.matches("^(CREATE \\w+)$")) {
                     System.out.println("create");
                     CreateTraj.create(argu[1]);
@@ -27,7 +31,6 @@ public class TrajDB {
                     String[] trajs = Arrays.copyOfRange(argu, 4, argu.length);
                     int ret = InsertTraj.insert(argu[2], trajs);
                     System.out.println(ret);
-
                 } else if (input.matches("^(DELETE FROM \\w+ TRAJECTORY \\d+)$")) {
                     System.out.println("delete");
 //                    System.out.println("args: " + argu[2] + ", " + argu[4]);

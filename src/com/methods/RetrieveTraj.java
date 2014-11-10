@@ -9,6 +9,7 @@ import java.io.RandomAccessFile;
  */
 public class RetrieveTraj {
 
+    // retrieve trajectory
     public static String retrieve (String tname, String tid){
         String trajectory = "";
         File map = new File(com.methods.helpers.mapPath(tname));
@@ -25,12 +26,14 @@ public class RetrieveTraj {
             long[] limits;
             int id = Integer.parseInt(tid);
 
+            // retrieve pointers for data / map
             limits = helpers.getLimits(mapRaf,id);
 
             dataRaf.seek(limits[0]);
             long length = limits[1] - limits[0];
             int count = (int) (length / 56);
 
+            // retrieve trajectory as concatenated string
             StringBuilder sb = new StringBuilder();
             String entry;
             for(int x = 0; x < count-1; x++) {
@@ -48,6 +51,7 @@ public class RetrieveTraj {
         return trajectory;
     }
 
+    // retrieve the length of the trajectory
     public static int getCount (String tname, String tid){
         int count;
         String trajectory = retrieve(tname, tid);
