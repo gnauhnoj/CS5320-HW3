@@ -31,3 +31,7 @@ When trajectories are inserted, the space file is retrieved to check if there is
         We update the space file with the new starting position of the "free space" which we just used (thereby making the space smaller).
 
 Deletion:
+The map file is updated by changing the index of the trajectory to be deleted to -1. The start and end pointer are copied into the free space file, along with the location of its entry in the map file. When the user tries to retrieve this trajectory in the future, the index cannot be found in the map file, as expected, and this serves as a soft delete.
+
+Retrieve:
+The map file is scanned for a matching index. Once this index is found, the corresponding start and end pointers for this trajectory in the data file are read and returned. An error is thrown if the index is not found.
