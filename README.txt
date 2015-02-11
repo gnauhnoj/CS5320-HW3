@@ -6,7 +6,7 @@ Directions:
 The java source files can be found in the /src directory. Compiled and build files can be found in the /out directory. To run our code, navigate to /out/production/CS5320-HW3/ and call "java TrajDB;". This implementation follows the syntax as suggested in the assignment.
 
 How Data is Stored:
-Data is stored across 3 separate files in the /data director. The creation of a trajectory set creates 3 files - <set name>-data (data file), <set name>-map (map file), and <set name>-freespace (space file). Upon initialization, the map and space file are initialized with a header count of 0 (this initial integer value represents the number of indexes used (map file) and the number of "free spaces" (space file) available.
+Data is stored across 3 separate files in the /data directory. The creation of a trajectory set creates 3 files - <set name>-data (data file), <set name>-map (map file), and <set name>-freespace (space file). Upon initialization, the map and space file are initialized with a header count of 0 (this initial integer value represents the number of indexes used (map file) and the number of "free spaces" (space file) available.
 
 For all 3 files, all data is stored as binary values. The map file stores the following information: number of indices used (header integer), trajectory index, trajectory starting position (in the data file), and trajectory end position (in the data file). The data file stores trajectories as binary representations (broken down for each of the entry fields). The space file stores the count of "free space" available, free space map position, free space data start position, and free space data end position.
 
